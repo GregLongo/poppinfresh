@@ -17,7 +17,7 @@ export default function ThisStudent({student}){
   ])
 
   const students = useSelector((state) => state.firebase.data.students)
-  const [selectDate, setDate] = useState(0)
+  const [selectDate, setDate] = useState('12')
 
   if (!isLoaded(students)) {
     return <div>Loading...</div>
@@ -26,14 +26,18 @@ export default function ThisStudent({student}){
   if (isEmpty(students)) {
     return <div>Students List Is Empty</div>
   }
+
   const events = students[student].timestamps;
   // [Date.parse(students["student1"].event.time), 0],;
 
+  const initDate = new Date(events['event1'].time)
 
+  console.log(Date.parse(initDate.getDate()))
 //Just Date
 const dates = [];
 
 Object.keys(events).map((key,id) =>{
+  // console.log(key)
   var date = new Date(Date.parse(events[key].time));
   var dateTrunc = Date.parse(date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate());
   if(!dates.includes(dateTrunc)){dates.push(dateTrunc)};
