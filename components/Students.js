@@ -6,6 +6,8 @@ import  'firebase/compat/database'
 import styles from '../styles/Home.module.css'
 import Student from "./Student.js"
 import SelectedStudent from "./SelectedStudent.js"
+import { useRouter } from "next/router"
+import Link from 'next/link'
 
 export default function Students() {
   useFirebaseConnect([
@@ -13,7 +15,6 @@ export default function Students() {
   ])
 
   const students = useSelector((state) => state.firebase.data.students)
-  const [selected, selectStudent] = useState("student1")
 
   if (!isLoaded(students)) {
     return <div>Loading...</div>
@@ -22,25 +23,30 @@ export default function Students() {
   if (isEmpty(students)) {
     return <div>Students List Is Empty</div>
   }
+
+
   return (
     <div className={styles.layout}>
       <ul className={styles.grid}>
           {Object.keys(students).map((key,id) =>(
-            <div onClick={()=> selectStudent(key)}>
-              <Student
-               name={students[key].name}
-               age={students[key].age}
-               avatar={students[key].avatar}
-               />
-            </div>
+            <div>
+            <Link href={{
+              pathname:"/ThisStudent",
+              query: {student:[key]}
+            }}>
+            <a>
+                <Student
+                 name={students[key].name}
+                 age={students[key].age}
+                 avatar={students[key].avatar}
+                 />
+                 </a>
+                 </Link>
+              </div>
           ))}
       </ul>
       <div>
-        <SelectedStudent
-          name={students[selected].name}
-          age={students[selected].age}
-          avatar={students[selected].avatar}
-        />
+
       </div>
     </div>
   )
