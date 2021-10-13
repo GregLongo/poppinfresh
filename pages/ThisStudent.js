@@ -30,7 +30,9 @@ export default function ThisStudent({student}){
   //   setDate('12')
   // });
 
-  const [thisPopup, selectPopup] = useState()
+  const [thisPopupTitle, selectPopupTitle] = useState()
+  const [thisPopupCategory, selectPopupCategory] = useState();
+  const [thisPopupText, selectPopupText] = useState();
 
 
 
@@ -74,11 +76,13 @@ const timestamps = [];
   Object.keys(events).map((key,id) =>{
     var stamp = new Date(Date.parse(events[key].time));
     var stampTrunc = stamp.getFullYear()+"/"+(stamp.getMonth()+1)+"/"+stamp.getDate();
-    // console.log("moo"+stampTrunc)
-    if(stampTrunc == selectDate ) {timestamps.push([stamp,0,'flobrb'])}
+    console.log(popups[events[key].id].category)
+    var cat = popups[events[key].id].category;
+    var interactive = popups[events[key].id].interactive;
+    if(stampTrunc == selectDate ) {timestamps.push({x:stamp,y:0,cat:cat,interactive:interactive})}
   })
 
-  var lastevent ="LP2";
+  var lastevent ="LP3";
   // console.log("sisisisi"+students[student].timestamps[lastevent].id);
 
 
@@ -92,16 +96,19 @@ const timestamps = [];
   // console.log("Chapter: "+popups[lastevent].title)
   // // console.log("pages: "+currentPages)
 
-
+const uiEcho =[];
 
   const options = {
     title: {
       text: ''
     },
     xAxis: {
-      type: 'datetime'
+      type: 'datetime',
+      lineWidth: 3,
     },
-
+    legend:{
+      enabled: false
+    },
     credits:{
       enabled:false
     },
@@ -118,9 +125,37 @@ const timestamps = [];
       },
     series:[{
       dataLabels: {
-        enabled: true
+        enabled: true,
+        useHTML: true,
+        allowOverlap: false,
+        formatter() {
+          console.log(this.point.blorb)
+          var thisClass = '';
+          	if (this.point.interactive) {
+              return '<div>'+ this.point.cat +'<img src="https://www.highcharts.com/samples/graphics/sun.png"></img></div>'
+            } else {
+            	return '<div>'+ this.point.cat +'<img src="https://www.highcharts.com/samples/graphics/snow.png"></img></div>'
+            }
+          }
+                // shape: 'url(http://simpleicon.com/wp-content/uploads/rocket.svg)',
+        // style:{
+        //   width: '24px',
+        //   height: '24px',
+        //   fontSize: 12
+        //   }
       },
+      lineWidth: '3px',
+      lineWidthPlus: '3px',
+      color: 'black',
       allowPointSelect: true,
+      states: {
+          hover:{
+            enabled: false
+          },
+          inactive: {
+              enabled: false
+          },
+      },
       point: {
           events: {
               click: function() {
@@ -139,10 +174,21 @@ const timestamps = [];
                   })
               },
               select: function(events){
-                const poppers = students[student].timestamps['event'+((this.x)+1)].id
-                selectPopup(poppers);
-                console.log(popups[poppers].category);
+                const poppers = students[student].timestamps['event'+((this.index)+1)].id
+                selectPopupTitle(popups[poppers].title)
+                selectPopupCategory(popups[poppers].category)
+                selectPopupText(popups[poppers].text)
 
+
+
+                ////an attempt to put the values into an array rather than putting the individual values in local state
+                // selectPopup(poppers);
+                //   uiEcho.push({
+                //     title: popups[poppers].title,
+                //     cat:popups[poppers].category,
+                //     text:popups[poppers].text,
+                //   })
+                //   console.log(uiEcho[0]);
               }
           }
       },
@@ -184,8 +230,11 @@ const timestamps = [];
       highcharts={Highcharts}
       options={options}
     />
-
-
+    <div>
+    <div>{thisPopupTitle}</div>
+    <div>{thisPopupCategory}</div>
+    <div>{thisPopupText}</div>
+    </div>
   </div>
 
 )
