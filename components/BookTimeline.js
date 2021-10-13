@@ -9,6 +9,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import 'highcharts/modules/timeline'
 
+
 export default function BookTimeline({student, lastevent}){
 
   useFirebaseConnect([
@@ -64,11 +65,40 @@ if (isEmpty(booksList)) {
     :'url(http://simpleicon.com/wp-content/uploads/star.svg)'
 
 const bookmarks=[];
+const progress=[];
 
 Object.keys(popups).map((key, id)=>{
     var page = popups[key].page;
-    bookmarks.push([page,0]);
+    var cat = popups[key].category;
+    var interactive = popups[key].interactive;
+    bookmarks.push({x:page,y:0,cat:cat,interactive:interactive});
+    bookmarks.push({x:0,y:0,cat:'',interactive:false});
+    bookmarks.unshift({x:currentPages,y:0,cat:'',interactive:false});
 })
+
+
+
+Object.keys(bookmarks).map((key, id)=>{
+  console.log(popups[lastpopup].page)
+  if(bookmarks[key].x <= popups[lastpopup].page){
+    progress.push(bookmarks[key])
+  }
+})
+
+// console.log(progress)
+
+
+
+
+// const timestamps = [];
+//
+//   Object.keys(events).map((key,id) =>{
+//     var stamp = new Date(Date.parse(events[key].time));
+//     var stampTrunc = stamp.getFullYear()+"/"+(stamp.getMonth()+1)+"/"+stamp.getDate();
+//     // console.log("moo"+stampTrunc)
+//     if(stampTrunc == selectDate ) {timestamps.push([stamp,0,'flobrb'])}
+//   })
+//
 
 
 
@@ -78,6 +108,9 @@ Object.keys(popups).map((key, id)=>{
     },
     credits:{
       enabled:false
+    },
+    legend:{
+      enabled: false
     },
     chart: {
         spacingBottom: 15,
@@ -96,24 +129,58 @@ Object.keys(popups).map((key, id)=>{
           enabled: false
       },
     series:[{
+      animation: false,
+      data:bookmarks,
       type: 'line',
+      lineWidth: '10px',
+      states: {
+          hover:{
+            enabled: false
+          },
+          inactive: {
+              enabled: false
+          },
+      },
       dataLabels: {
         enabled: true,
-        // shape: 'url(http://simpleicon.com/wp-content/uploads/rocket.svg)',
+        useHTML: true,
+        allowOverlap: false,
+        formatter() {
+          console.log(this.point.blorb)
+          var thisClass = '';
+
+          if(this.point.x !=0 && this.point.x !=currentPages){
+            if(this.point.x > popups[lastpopup].page){
+              thisClass= styles.desaturate
+            }
+          	if (this.point.interactive) {
+              return '<div class="'+ thisClass +'"><img src="https://www.highcharts.com/samples/graphics/sun.png"></img></div>'
+            } else {
+            	return '<div class="'+ thisClass +'"><img src="https://www.highcharts.com/samples/graphics/snow.png"></img></div>'
+            }
+          }
+        }        // shape: 'url(http://simpleicon.com/wp-content/uploads/rocket.svg)',
         // style:{
         //   width: '24px',
         //   height: '24px',
         //   fontSize: 12
         //   }
-          },
-      marker:{
-        symbol:symbol,
-        width: 24,
-        height:24,
       },
-      allowPointSelect: false,
+      // marker: true ? {
+      //   symbol: "url(http://simpleicon.com/wp-content/uploads/rocket.svg)",
+      //     height: 24,
+      //     width: 24,
+      // }:
+      // {
+      //   symbol: "url(http://simpleicon.com/wp-content/uploads/star.svg)",
+      //     height: 24,
+      //     width: 24,
+      // },
+
+      allowPointSelect: true,
+      cursor: 'pointer',
       point: {
-        y: "-240"
+        // y: 240
       //     events: {
       //         click: function() {
       //             this.series.chart.update({
@@ -138,8 +205,25 @@ Object.keys(popups).map((key, id)=>{
       //         }
       //     }
       },
-      data:bookmarks,
-    }]
+    },
+    {
+      cursor: 'pointer',
+      allowPointSelect: true,
+
+      states: {
+          hover:{
+            enabled: false
+          },
+          inactive: {
+              enabled: false
+          },
+      },
+      data:progress,
+      type: 'line',
+      lineWidth: '10px',
+      color: 'teal'
+    }
+    ]
   }
 
   return(
