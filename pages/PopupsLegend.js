@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase'
 import  'firebase/compat/database'
@@ -10,6 +10,7 @@ import HighchartsReact from 'highcharts-react-official'
 // import 'highcharts/modules/timeline'
 
 import PopupTable from '../components/PopupTable.js'
+import PopupTable2 from '../components/PopupTable2.js'
 
 
 export default function PopupsLegend(){
@@ -27,29 +28,12 @@ export default function PopupsLegend(){
 
   const papusas = [];
 
-  const headers =[
-    {
-      Header: 'Title',
-      accessor: 'title'
-    },
-    {
-      Header: 'Category',
-      accessor: 'category'
-    },
-    {
-      Header: 'Page',
-      accessor: 'page'
-    },
-    {
-      Header: 'Interactive?',
-      accessor: 'interactive'
-    },
-    {
-      Header: 'Total Plays',
-      accessor: 'plays'
-    }
-  ];
 
+    const [lp, setLP] = useState(0);
+
+    const callback = useCallback((lp) =>{
+      setLP(lp);
+    },[]);
 
   if (!isLoaded(popups)) {
   return <div>Loading...</div>
@@ -62,6 +46,7 @@ export default function PopupsLegend(){
   if (isLoaded(popups)) {
     Object.keys(popups).map((key,id)=>{
       papusas.push({
+        lp:key,
         title:popups[key].title,
         category:popups[key].category,
         page:popups[key].page,
@@ -69,12 +54,18 @@ export default function PopupsLegend(){
         plays:'22'
       })
     })
-    console.log('heyyyy');
   }
 
+  // console.log(popups[lp].text)
 
+   const expandedPopup = lp ? popups[lp] : 'choose popup';
   return(
-    <PopupTable papusas={papusas} headers={headers} />
+    <div>
+      <PopupTable2 papusas={papusas}  grandParentCallback={callback} />
+      <div>{expandedPopup.title}</div>
+      <div>{expandedPopup.category}</div>
+      <div>{expandedPopup.text}</div>
+    </div>
   )
 
 }

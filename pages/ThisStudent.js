@@ -230,11 +230,9 @@ const uiEcho =[];
       highcharts={Highcharts}
       options={options}
     />
-    <div>
     <div>{thisPopupTitle}</div>
     <div>{thisPopupCategory}</div>
     <div>{thisPopupText}</div>
-    </div>
   </div>
 
 )

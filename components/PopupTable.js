@@ -28,8 +28,6 @@ const columns = React.useMemo(
 
 
 
-
-
 const tableInstance = useTable({columns, data});
 
 const {
