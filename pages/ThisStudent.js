@@ -10,12 +10,14 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import 'highcharts/modules/timeline'
 import BookTimeline from "../components/BookTimeline.js"
+import BulletChart from "../components/BulletChart.js"
+import TimeSeries from "../components/TimeSeries.js"
 
 
 export default function ThisStudent({student}){
 
   useFirebaseConnect([
-    '/students',
+    '/students', //in the future change this to just query 1 student, but since its just one class wtv
     '/popups'
   ])
 
@@ -209,6 +211,14 @@ const uiEcho =[];
     <div>{students[student].age}</div>
     <div>Now Reading: {currentBook.booktitle}</div>
     <div>{currentBook.title}</div>
+    <div><BulletChart val={students[student].speed} max={300} title={'Avg Speed'} /></div>
+    <div><BulletChart val={students[student].overall} max={300} title={'Overall'} /></div>
+    <div><BulletChart val={100} title={'category'} max={300} sm={true}/></div>
+    <div><BulletChart val={75} title={'category'} max={300} sm={true}/></div>
+    <div><BulletChart val={150} title={'category'} max={300} sm={true}/></div>
+    <div><BulletChart val={200} title={'category'} max={300} sm={true}/></div>
+    <div><TimeSeries /></div>
+
     <BookTimeline
       lastevent= {lastevent}//pass me the id of the last item from "timestamps" via key
     />
