@@ -39,6 +39,8 @@ export default function Students() {
                  name={students[key].name}
                  age={students[key].age}
                  avatar={students[key].avatar}
+                 speed={students[key].speed}
+                 overall={students[key].overall}                 
                  />
                  </a>
                  </Link>
