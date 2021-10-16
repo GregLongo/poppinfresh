@@ -8,6 +8,7 @@ import Student from "./Student.js"
 import SelectedStudent from "./SelectedStudent.js"
 import { useRouter } from "next/router"
 import Link from 'next/link'
+import Nav from "./Nav.js"
 
 export default function Students() {
   useFirebaseConnect([
@@ -40,7 +41,7 @@ export default function Students() {
                  age={students[key].age}
                  avatar={students[key].avatar}
                  speed={students[key].speed}
-                 overall={students[key].overall}                 
+                 overall={students[key].overall}
                  />
                  </a>
                  </Link>

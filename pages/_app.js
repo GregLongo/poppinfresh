@@ -6,6 +6,8 @@ import { createStore, combineReducers, compose} from "redux"
 import { ReactReduxFirebaseProvider, firebaseReducer} from "react-redux-firebase"
 import firebaseConfig from "../config.js"
 import 'firebase/compat/auth'
+import Layout from "../components/Layout";
+import Link from "next/link";
 
 
 
@@ -42,7 +44,9 @@ function MyApp({ Component, pageProps }) {
       <React.StrictMode>
       <Provider store={store}>
         <ReactReduxFirebaseProvider {...rrfProps}>
+        <Layout>
             <Component {...pageProps} />
+        </Layout>
         </ReactReduxFirebaseProvider>
       </Provider>
       </React.StrictMode>
