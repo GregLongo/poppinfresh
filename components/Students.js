@@ -9,6 +9,9 @@ import SelectedStudent from "./SelectedStudent.js"
 import { useRouter } from "next/router"
 import Link from 'next/link'
 import Nav from "./Nav.js"
+import StudentGrid from "/components/StudentGrid.js"
+import StudentList from "/components/StudentList.js"
+
 
 export default function Students() {
   useFirebaseConnect([
@@ -16,6 +19,8 @@ export default function Students() {
   ])
 
   const students = useSelector((state) => state.firebase.data.students)
+
+  const [isGrid, setGrid] = useState(true);
 
   if (!isLoaded(students)) {
     return <div>Loading...</div>
@@ -28,28 +33,22 @@ export default function Students() {
 
   return (
     <div className={styles.layout}>
-      <ul className={styles.grid}>
-          {Object.keys(students).map((key,id) =>(
-            <div>
-            <Link href={{
-              pathname:"/ThisStudent",
-              query: {student:[key]}
-            }}>
-            <a>
-                <Student
-                 name={students[key].name}
-                 age={students[key].age}
-                 avatar={students[key].avatar}
-                 speed={students[key].speed}
-                 overall={students[key].overall}
-                 />
-                 </a>
-                 </Link>
-              </div>
-          ))}
-      </ul>
+      <button onClick={()=>{
+        setGrid(false)
+      }}>
+        List Mode
+      </button>
+      <button onClick={()=>{
+        setGrid(true)
+      }}>
+        Grid Mode
+      </button>
+    {
+       isGrid ?
+      <StudentGrid students={students}/>
+      : <StudentList students={students}/>
+    }
       <div>
-
       </div>
     </div>
   )

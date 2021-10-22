@@ -23,9 +23,6 @@ export default function BookTimeline({student, lastevent}){
   const [thisPopup, selectPopup] = useState()
 
 
-
-
-
     if (!isLoaded(popups)) {
     return <div>Loading...</div>
   }
