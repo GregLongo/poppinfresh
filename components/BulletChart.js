@@ -19,17 +19,21 @@ export default function BulletChart(props){
 
   const [options, setOptions] = useState({
       chart: {
-        marginTop: props.sm ? 30 : 40,
-        marginBottom: props.sm ? 20 : 40,
+        marginTop: props.sm ? 22 : null,
+        marginBottom: props.sm ? 10 : null,
         inverted: true,
-        marginLeft: 135,
         type: "bullet",
         styledMode: false,
-        height: props.sm ? 80 : 140,
-        width: props.sm ? 300 : 600
+        height: props.sm ? 50 : 100,
+        width: props.sm ? 240 : null,
+        backgroundColor: 'transparent',
       },
       title: {
-        text: title
+        text: title,
+        align: 'left',
+        style:{
+          fontSize: 12
+        }
       },
       credits:{
         enabled: false
@@ -39,16 +43,19 @@ export default function BulletChart(props){
       } ,
       height: 1,
       xAxis: {
+
         categories: [
           // '<span class="hc-cat-title">Revenue</span><br/>U.S. $ (1,000s)'
         ]
       },
       plotOptions: {
         series: {
-          lineWidth: 20,
-          pointPadding: 0.25,
+          lineWidth: 8,
+          pointPadding: 0,
           borderWidth: 0,
-          color: "#000",
+          color: props.color,
+          marginTop: 0,
+          marginBottom: 0,
           targetOptions: {
             width: 0,
           }
@@ -57,10 +64,15 @@ export default function BulletChart(props){
       legend: {
         enabled: false
       },
+      xAxis:{
+        visible: false
+      },
       yAxis: {
-        max:props.max,
+        // height: 6,
 
-        gridLineWidth: 0,
+        max:props.max,
+        visible: true,
+        gridLineWidth: 1,
         // plotBands: [
         //   {
         //     from: 0,
@@ -78,7 +90,12 @@ export default function BulletChart(props){
         //     color: "#bbb"
         //   }
         // ],
-        title: 'jdjjsjkjkdj'
+        title: 'jdjjsjkjkdj',
+        labels:{
+          style:{
+            fontSize: 8
+          }
+        }
       },
       series: [
         {

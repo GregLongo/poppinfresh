@@ -1,13 +1,21 @@
 import React, { useState } from 'react'
-import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { useRouter } from "next/router"
 import Student from "./Student.js"
 
+import styled from "@emotion/styled"
+
+
 
 export default function StudentGrid({students}){
+  const StudentGrid = styled.ul`
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 40px
+  `
+
   return(
-    <ul className={styles.grid}>
+    <StudentGrid >
         {Object.keys(students).map((key,id) =>(
           <div key={key}>
           <Link href={{
@@ -26,6 +34,6 @@ export default function StudentGrid({students}){
                </Link>
             </div>
         ))}
-    </ul>
+    </StudentGrid>
   )
 }

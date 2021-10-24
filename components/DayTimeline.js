@@ -7,6 +7,8 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import 'highcharts/modules/timeline'
 import PopupInspector from "/components/PopupInspector"
+import styled from "@emotion/styled"
+import { css } from '@emotion/react';
 
 
 export default function DayTimeline(props){
@@ -70,6 +72,18 @@ const timestamps = [];
   var lastevent ="LP3";
   // console.log("sisisisi"+students[student].timestamps[lastevent].id);
 
+const DateButton = styled.button`
+  background: transparent;
+  border: none;
+  border-top: 3px solid lightblue;
+  padding-top: .5rem;
+  margin-right: .5rem;
+`
+const DateMarquis = styled.div`
+  padding: 2rem .5rem 0rem;
+  font-size: 24px
+`
+
 
 
   const currentBook = popups[lastevent];
@@ -87,6 +101,10 @@ const timestamps = [];
     xAxis: {
       type: 'datetime',
       lineWidth: 3,
+      opposite: true
+    },
+    yAxis:{
+      visible: false
     },
     legend:{
       enabled: false
@@ -95,12 +113,11 @@ const timestamps = [];
       enabled:false
     },
     chart: {
-        spacingBottom: 15,
-        spacingTop: 0,
+        // spacingBottom: 70,
+        spacingTop: 40,
         spacingLeft: 10,
         spacingRight: 10,
-        width: 700,
-        height: 300
+        height: 160
       },
       tooltip:{
           enabled: false
@@ -114,14 +131,13 @@ const timestamps = [];
           console.log(this.point.blorb)
           var thisClass = '';
           	if (this.point.interactive) {
-              return '<div>'+ this.point.cat +'<img src="https://www.highcharts.com/samples/graphics/sun.png"></img></div>'
+              return '<div><img src="/img/interactive.svg"><br/>'+ this.point.cat +'</div>'
             } else {
-            	return '<div>'+ this.point.cat +'<img src="https://www.highcharts.com/samples/graphics/snow.png"></img></div>'
+            	return '<div><img src="/img/bulb.svg"><br/><span css={'+ {visibility: 'hidden'} +'}>'+ this.point.cat +'</span></div>'
             }
           }
-      },
-      lineWidth: '3px',
-      lineWidthPlus: '3px',
+      },      lineWidth: '4px',
+      lineWidthPlus: '4px',
       color: 'black',
       allowPointSelect: true,
       states: {
@@ -167,7 +183,7 @@ const timestamps = [];
     var myDate = new Date(thisDate)
 
     console.log(timestamps)
-    return <button onClick={() => {
+    return <DateButton onClick={() => {
       setDate(myDate.getFullYear()+"/"+(myDate.getMonth()+1)+"/"+myDate.getDate())
 
         const someevent = Object.keys(students[student].timestamps)[Object.keys(students[student].timestamps).length-1];
@@ -175,8 +191,9 @@ const timestamps = [];
     }}>{
         myDate.getFullYear()+"/"+(myDate.getMonth()+1)+"/"+myDate.getDate()
       }
-        </button>
+        </DateButton>
      })}
+     <DateMarquis>{selectDate}</DateMarquis>
     <HighchartsReact
       highcharts={Highcharts}
       options={options}

@@ -7,6 +7,7 @@ faCommentAlt
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import NavButton from "./NavButton.js"
+import styled from "@emotion/styled"
 
 
 const navButtons = [
@@ -23,8 +24,27 @@ const navButtons = [
 ];
 
 
-const Nav = props =>(
-  <div>
+export default function Nav(props){
+
+  const NavBar = styled.div`
+    height: 100vh;
+    width: 140px;
+    /* position: absolute; */
+    background: black;
+    color: white;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem
+  `
+  const Logo = styled.div`
+
+  `
+
+  return(
+
+  <NavBar>
+    <div>Living Popups Dashboard App</div>
     {navButtons.map(button => (
       <NavButton
         key={button.path}
@@ -33,7 +53,5 @@ const Nav = props =>(
         icon={button.icon}
       />
     ))}
-  </div>
-);
-
-export default Nav
+  </NavBar>)
+}

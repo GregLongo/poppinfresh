@@ -9,6 +9,13 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import 'highcharts/modules/timeline'
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faList,
+  faTh
+} from "@fortawesome/free-solid-svg-icons";
+
+// import * as bulb from 'img/bulb.svg'
 
 export default function BookTimeline({student, lastevent}){
 
@@ -98,7 +105,6 @@ Object.keys(bookmarks).map((key, id)=>{
 //
 
 
-
   const options = {
     title: {
       text: ''
@@ -110,17 +116,19 @@ Object.keys(bookmarks).map((key, id)=>{
       enabled: false
     },
     chart: {
-        spacingBottom: 15,
         spacingTop: 0,
         spacingLeft: 10,
         spacingRight: 10,
-        width: 700,
-        height: 300
+        height: 200
       },
       xAxis: {
-        offset: -1143,
+        visible: false,
         min: 0,
         max: currentPages,
+        opposite: true
+      },
+      yAxis:{
+        visible: false
       },
       tooltip:{
           enabled: false
@@ -130,6 +138,10 @@ Object.keys(bookmarks).map((key, id)=>{
       data:bookmarks,
       type: 'line',
       lineWidth: '10px',
+      color: 'lightgrey',
+      marker:{
+        enabled: true,
+      },
       states: {
           hover:{
             enabled: false
@@ -139,6 +151,7 @@ Object.keys(bookmarks).map((key, id)=>{
           },
       },
       dataLabels: {
+        y: 32,
         enabled: true,
         useHTML: true,
         allowOverlap: false,
@@ -151,9 +164,9 @@ Object.keys(bookmarks).map((key, id)=>{
               thisClass= styles.desaturate
             }
           	if (this.point.interactive) {
-              return '<div class="'+ thisClass +'"><img src="https://www.highcharts.com/samples/graphics/sun.png"></img></div>'
+              return '<div class="'+ thisClass +'"><img src="/img/interactive.svg"></img></div>'
             } else {
-            	return '<div class="'+ thisClass +'"><img src="https://www.highcharts.com/samples/graphics/snow.png"></img></div>'
+            	return '<div class="'+ thisClass +'"><img src="/img/bulb.svg"></img></div>'
             }
           }
         }        // shape: 'url(http://simpleicon.com/wp-content/uploads/rocket.svg)',
@@ -218,7 +231,7 @@ Object.keys(bookmarks).map((key, id)=>{
       data:progress,
       type: 'line',
       lineWidth: '10px',
-      color: 'teal'
+      color: '#77C294'
     }
     ]
   }
