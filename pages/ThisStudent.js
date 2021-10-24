@@ -8,6 +8,8 @@ import BookTimeline from "../components/BookTimeline.js"
 import BulletChart from "../components/BulletChart.js"
 import TimeSeries from "../components/TimeSeries.js"
 import DayTimeline from "/components/DayTimeline"
+import Teacher from "../components/Teacher.js"
+import styled from "@emotion/styled"
 
 export default function ThisStudent({student}){
 
@@ -47,26 +49,62 @@ if (isEmpty(popups)) {
 
   const currentBook = popups[lastevent];
 
+  const Container = styled.div`
+    display: grid;
+    grid-template-columns: 50% 40%;
+    grid-gap: 3rem;
+    margin: 4rem;
+    max-width: 100vw;
+  `
+  const LeftContainer = styled.div`
+    background: white;
+    padding: 1rem
+  `
+  const RightContainer = styled.div`
+    background: white;
+    padding: 3rem 1rem
+  `
+
+  const Info = styled.div`
+    display: grid;
+    grid-template-columns: 25% 75%;
+    align-items: center;
+    padding: 2rem;
+    height: 200px;
+    /* img{
+      height:140px
+    } */
+  `
+
   return(
   <div>
-    <div><img src={students[student].avatar} /></div>
-    <div>{students[student].name}</div>
-    <div>{students[student].age}</div>
-    <div>Now Reading: {currentBook.booktitle}</div>
-    <div>{currentBook.title}</div>
-    <div><BulletChart val={students[student].speed} max={300} title={'Avg Speed'} /></div>
-    <div><BulletChart val={students[student].overall} max={300} title={'Overall'} /></div>
-    <div><BulletChart val={100} title={'category'} max={300} sm={true}/></div>
-    <div><BulletChart val={75} title={'category'} max={300} sm={true}/></div>
-    <div><BulletChart val={150} title={'category'} max={300} sm={true}/></div>
-    <div><BulletChart val={200} title={'category'} max={300} sm={true}/></div>
-    <div><TimeSeries /></div>
-
-    <BookTimeline
-      lastevent= {lastevent}//pass me the id of the last item from "timestamps" via key
-    />
-    <DayTimeline student={student}/>
-
+    <Teacher/>
+    <Container>
+      <LeftContainer>
+        <Info>
+          <div>
+            <img src={students[student].avatar} />
+          </div>
+          <div>
+            <div>{students[student].name}</div>
+            <div>Now Reading: {currentBook.booktitle} - {currentBook.title}</div>
+          </div>
+        </Info>
+        <BookTimeline
+          lastevent= {lastevent}//pass me the id of the last item from "timestamps" via key
+        />
+        <DayTimeline student={student}/>
+      </LeftContainer>
+      <RightContainer>
+        <div>
+          <div><BulletChart val={students[student].speed} max={300} title={'Avg Speed'} color={'#77C294'} /></div>
+          <div><BulletChart val={students[student].overall} max={300} title={'Overall'} color={'#F48C71'} /></div>
+        </div>
+        <div>
+          and he were inseparable. What about Adrian Singleton and his dreadful end? What about Lord Kent's only son and his career? I met his father yesterday in St. James's Street. He seemed broken with shame and sorrow. What about the young Duke of Perth? What sort of life has he got now? What gentleman would
+          </div>
+      </RightContainer>
+    </Container>
   </div>
 
 )

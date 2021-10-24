@@ -1,13 +1,15 @@
-import styles from '../styles/Home.module.css'
 import React from "react"
 import Students from "../components/Students.js"
+import Teacher from "../components/Teacher.js"
 
+import styled from "@emotion/styled"
 
 
 export default function Home() {
   return (
 
-        <div className={styles.container}>
+        <div >
+          <Teacher/>
           <Students />
         </div>
 
