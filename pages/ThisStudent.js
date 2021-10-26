@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase'
 import  'firebase/compat/database'
@@ -10,7 +10,7 @@ import TimeSeries from "../components/TimeSeries.js"
 import DayTimeline from "/components/DayTimeline"
 import Teacher from "../components/Teacher.js"
 import styled from "@emotion/styled"
-
+import PopupInspector from "/components/PopupInspector.js"
 export default function ThisStudent({student}){
 
   useFirebaseConnect([
@@ -22,9 +22,27 @@ export default function ThisStudent({student}){
   const popups = useSelector((state) => state.firebase.data.popups)
 
 
-  const [thisPopupTitle, selectPopupTitle] = useState()
-  const [thisPopupCategory, selectPopupCategory] = useState();
-  const [thisPopupText, selectPopupText] = useState();
+  const [thisPopupTitle, selectPopupTitle] = useState('default')
+  const [thisPopupCategory, selectPopupCategory] = useState('default');
+  const [thisPopupText, selectPopupText] = useState('default');
+
+
+
+
+
+
+  const [thisPopup, selectPopup] = useState('LP3');
+
+  const parentCallback = useCallback((poppers) =>{
+
+    selectPopup(poppers);
+    // selectPopupTitle(popups[poppers].title)
+    // selectPopupCategory(popups[poppers].category)
+    // selectPopupText(popups[poppers].text)
+    // console.log('meeep'+ poppers)
+  },[])
+
+
 
 
     if (!isLoaded(students)) {
@@ -41,6 +59,19 @@ export default function ThisStudent({student}){
 if (isEmpty(popups)) {
   return <div>Students List Is Empty</div>
 }
+
+
+
+
+
+const selectedPopup = {
+  title: popups[thisPopup].title,
+  category: popups[thisPopup].category,
+  text: popups[thisPopup].text
+}
+
+
+
 
 
   var lastevent ="LP3";
@@ -93,7 +124,7 @@ if (isEmpty(popups)) {
         <BookTimeline
           lastevent= {lastevent}//pass me the id of the last item from "timestamps" via key
         />
-        <DayTimeline student={student}/>
+        <DayTimeline student={student} parentCallback={parentCallback}/>
       </LeftContainer>
       <RightContainer>
         <div>
@@ -101,7 +132,7 @@ if (isEmpty(popups)) {
           <div><BulletChart val={students[student].overall} max={300} title={'Overall'} color={'#F48C71'} /></div>
         </div>
         <div>
-          and he were inseparable. What about Adrian Singleton and his dreadful end? What about Lord Kent's only son and his career? I met his father yesterday in St. James's Street. He seemed broken with shame and sorrow. What about the young Duke of Perth? What sort of life has he got now? What gentleman would
+          <PopupInspector {...selectedPopup} />
           </div>
       </RightContainer>
     </Container>
