@@ -10,7 +10,6 @@ import PopupInspector from "/components/PopupInspector"
 import styled from "@emotion/styled"
 import { css } from '@emotion/react';
 
-
 export default function DayTimeline(props){
 
   useFirebaseConnect([
@@ -23,9 +22,9 @@ export default function DayTimeline(props){
 
   const [selectDate, setDate] = useState()
 
-  const [thisPopupTitle, selectPopupTitle] = useState()
-  const [thisPopupCategory, selectPopupCategory] = useState();
-  const [thisPopupText, selectPopupText] = useState();
+  // const [thisPopupTitle, selectPopupTitle] = useState()
+  // const [thisPopupCategory, selectPopupCategory] = useState();
+  // const [thisPopupText, selectPopupText] = useState();
 
   const student = [props.student]
 
@@ -84,15 +83,13 @@ const DateMarquis = styled.div`
   font-size: 24px
 `
 
-
-
   const currentBook = popups[lastevent];
 
-  const selectedPopup = {
-    title: thisPopupTitle,
-    category: thisPopupCategory,
-    text: thisPopupText
-  }
+  // const selectedPopup = {
+  //   title: thisPopupTitle,
+  //   category: thisPopupCategory,
+  //   text: thisPopupText
+  // }
 
   const options = {
     title: {
@@ -128,7 +125,7 @@ const DateMarquis = styled.div`
         useHTML: true,
         allowOverlap: false,
         formatter() {
-          console.log(this.point.blorb)
+          // console.log(this.point.blorb)
           var thisClass = '';
           	if (this.point.interactive) {
               return '<div><img src="/img/interactive.svg"><br/>'+ this.point.cat +'</div>'
@@ -157,19 +154,14 @@ const DateMarquis = styled.div`
                       }
                   });
               },
-              mouseOut: function() {
-                  this.series.chart.update({
-                      tooltip: {
-                          enabled: false
-                      }
-
-                  })
-              },
               select: function(events){
+                events.preventDefault()
+                // console.log(events)
                 const poppers = students[student].timestamps['event'+((this.index)+1)].id
-                selectPopupTitle(popups[poppers].title)
-                selectPopupCategory(popups[poppers].category)
-                selectPopupText(popups[poppers].text)
+                // selectPopupTitle(popups[poppers].title)
+                // selectPopupCategory(popups[poppers].category)
+                // selectPopupText(popups[poppers].text)
+                props.parentCallback(poppers)
               }
           }
       },
@@ -198,7 +190,6 @@ const DateMarquis = styled.div`
       highcharts={Highcharts}
       options={options}
     />
-    <PopupInspector {...selectedPopup} />
   </div>
 
 )
