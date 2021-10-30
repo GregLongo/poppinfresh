@@ -4,11 +4,26 @@ import { useSelector } from 'react-redux'
 import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase'
 import  'firebase/compat/database'
 import Table from "/components/Table.js"
+import styled from "@emotion/styled"
 
 
 function DefaultColumnFilter() {
   return null;
 }
+const Category = styled.button`
+  background: #B4D260;
+  width: fit-content;
+  margin-bottom: 2rem;
+  padding: .5rem 1rem;
+  border-radius: 16px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin: 1rem;
+  &:hover{
+    background: #76d260
+  }
+`
 
 // This is a custom filter UI for selecting
 // a unique option from a list
@@ -28,13 +43,13 @@ function SelectColumnFilter({
   // Render a multi-select box
   return (
     <div>
-    <button onClick={(e)=>{
+    <Category onClick={(e)=>{
       setFilter('')
-    }}>all</button>
+    }}>all</Category>
     {options.map((option,i)=>(
-      <button onClick={(e)=>{
+      <Category onClick={(e)=>{
         setFilter(option)
-      }}>{option}</button>
+      }}>{option}</Category>
     ))}
     </div>
   );

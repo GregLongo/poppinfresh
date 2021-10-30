@@ -6,6 +6,7 @@ faUserGraduate,
 faCommentAlt
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { withRouter, useRouter } from "next/router";
 import NavButton from "./NavButton.js"
 import styled from "@emotion/styled"
 
@@ -13,7 +14,7 @@ import styled from "@emotion/styled"
 const navButtons = [
   {
     label: "Students",
-    path: "/",
+    path: "/StudentPage",
     icon: <FontAwesomeIcon icon={faUserGraduate} />
   },
   {
@@ -30,7 +31,7 @@ export default function Nav(props){
     height: 100vh;
     width: 140px;
     /* position: absolute; */
-    background: black;
+    background: #77C294;
     color: white;
     align-items: center;
     display: flex;
@@ -38,19 +39,26 @@ export default function Nav(props){
     padding: 2rem
   `
   const Logo = styled.div`
-
+  cursor:pointer
   `
+
+  const blor = useRouter()
+  const blorquery = blor.query
+  console.log(blorquery.classroom)
 
   return(
 
   <NavBar>
-    <div>Living Popups Dashboard App</div>
+    <Link href={'/'}>
+      <Logo>Living Popups Dashboard App</Logo>
+    </Link>
     {navButtons.map(button => (
       <NavButton
         key={button.path}
         path={button.path}
         label={button.label}
         icon={button.icon}
+        classroom={blorquery.classroom}
       />
     ))}
   </NavBar>)

@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase'
@@ -23,22 +23,39 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 
-export default function Students() {
+export default function Students({classroom}) {
   useFirebaseConnect([
-    '/students',
+    '/classes',
   ])
 
-  const students = useSelector((state) => state.firebase.data.students)
+
+  // const [thisClass, setClassroom] = useState(classroom)
+  // const [students, setStudents] = useState([])
+
+  const classes = useSelector((state) => state.firebase.data.classes)
+
 
   const [isGrid, setGrid] = useState(true);
 
-  if (!isLoaded(students)) {
-    return <div>Loading...</div>
-  }
+  //
+  // if (isLoaded(classes)) {
+  //   setClassroom(classroom)
+  //   setStudents(thisClass)
+  // }
 
-  if (isEmpty(students)) {
-    return <div>Students List Is Empty</div>
-  }
+
+
+    if (!isLoaded(classes)) {
+      return <div>Loading...</div>
+    }
+
+    if (isEmpty(classes)) {
+      return <div>Students List Is Empty</div>
+    }
+
+    const students=classes[classroom];
+    // console.log(students)
+
 
   const Heading = styled.div`
     padding-top: 2rem;
@@ -49,6 +66,7 @@ export default function Students() {
     font-size: 24px;
   `
   const ViewButton = styled.button`
+    cursor: pointer;
     margin-left: 1rem;
     background-color: transparent;
     border: none;
@@ -56,16 +74,22 @@ export default function Students() {
   `
 
   const listButton = ({isGrid}) => css`
-    opacity: .3
+    opacity: .3;
+    &:hover{
+      opacity: .4
+    }
     ${isGrid === false && `
-      opacity: 1
+      opacity: 1 !important
     `}
   `
 
   const gridButton = ({isGrid}) => css`
-  opacity: .3
+  opacity: .3;
+    &:hover{
+      opacity: .4
+    }
     ${isGrid === true && `
-      opacity: 1
+      opacity: 1 !important
     `}
   `
 
@@ -88,8 +112,8 @@ export default function Students() {
     </Heading>
         {
            isGrid ?
-          <StudentGrid students={students}/>
-          : <StudentList students={students}/>
+          <StudentGrid students={students} classroom={classroom}/>
+          : <StudentList students={students} classroom={classroom}/>
         }
     </div>
   )
