@@ -8,7 +8,7 @@ import { useRouter } from "next/router"
 import Highcharts from 'highcharts'
 import bullet from 'highcharts/modules/bullet.js'
 import HighchartsReact from 'highcharts-react-official'
-
+import styled from "@emotion/styled"
 
 
 export default function BulletChart(props){
@@ -16,16 +16,24 @@ export default function BulletChart(props){
 
  const [val, setVal ] = useState(props.val);
  const [title, setTitle ] = useState(props.title);
+const Bullet = styled.div`
+  display: flex;
+  align-items: center;
+  span{
+      padding-top: .5rem;
+      font-size: 12px
+  }
+`
 
   const [options, setOptions] = useState({
       chart: {
         marginTop: props.sm ? 22 : null,
-        marginBottom: props.sm ? 10 : null,
+        marginBottom: props.sm ? 8 : null,
         inverted: true,
         type: "bullet",
         styledMode: false,
-        height: props.sm ? 50 : 100,
-        width: props.sm ? 240 : null,
+        height: props.sm ? 48 : 100,
+        width: props.sm ? 220 : null,
         backgroundColor: 'transparent',
       },
       title: {
@@ -50,6 +58,7 @@ export default function BulletChart(props){
       },
       plotOptions: {
         series: {
+          borderRadius: 8,
           lineWidth: 8,
           pointPadding: 0,
           borderWidth: 0,
@@ -59,7 +68,7 @@ export default function BulletChart(props){
           targetOptions: {
             width: 0,
           }
-        }
+        },
       },
       legend: {
         enabled: false
@@ -112,5 +121,5 @@ export default function BulletChart(props){
       ],
     });
 
-    return <div><HighchartsReact highcharts={Highcharts} options={options} /></div>;
+    return <Bullet><HighchartsReact highcharts={Highcharts} options={options} /><span>{val}</span></Bullet>;
   };

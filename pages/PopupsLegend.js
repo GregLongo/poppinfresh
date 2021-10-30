@@ -8,9 +8,12 @@ import Link from 'next/link'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 // import 'highcharts/modules/timeline'
+import PopupInspector from "/components/PopupInspector.js"
 
 import PopupTable from '../components/PopupTable.js'
 import PopupTable2 from '../components/PopupTable2.js'
+import styled from "@emotion/styled"
+import { css, jsx } from '@emotion/react'
 
 
 export default function PopupsLegend(){
@@ -59,12 +62,40 @@ export default function PopupsLegend(){
   // console.log(popups[lp].text)
 
    const expandedPopup = lp ? popups[lp] : 'choose popup';
+
+   const selectedPopup = {
+     title: expandedPopup.title,
+     category: expandedPopup.category,
+     text: expandedPopup.text
+   }
+
+   const Heading = styled.div`
+     padding-top: 2rem;
+     padding-bottom: 2rem;
+     padding-left: 3rem;
+     font-size: 36px;
+     border-bottom: 2px solid #CECECE
+   `
+   const RightContainer = styled.div`
+     background: white;
+     padding: 1rem 2rem;
+     margin: 3rem;
+     border-radius: 10px;
+   `
+
+
   return(
     <div>
-      <PopupTable2 papusas={papusas}  grandParentCallback={callback} />
-      <div>{expandedPopup.title}</div>
-      <div>{expandedPopup.category}</div>
-      <div>{expandedPopup.text}</div>
+    <Heading>All Popups</Heading>
+      <div css={css`
+          display: grid;
+          grid-template-columns: 60% 40%;
+        `}>
+        <PopupTable2 papusas={papusas}  grandParentCallback={callback} />
+        <RightContainer>
+          <PopupInspector {...selectedPopup} />
+        </RightContainer>
+      </div>
     </div>
   )
 

@@ -17,7 +17,7 @@ import {
 
 // import * as bulb from 'img/bulb.svg'
 
-export default function BookTimeline({student, lastevent}){
+export default function BookTimeline({student, lastevent, parentCallback}){
 
   useFirebaseConnect([
     '/popups',
@@ -75,7 +75,7 @@ Object.keys(popups).map((key, id)=>{
     var page = popups[key].page;
     var cat = popups[key].category;
     var interactive = popups[key].interactive;
-    bookmarks.push({x:page,y:0,cat:cat,interactive:interactive});
+    bookmarks.push({key:key,x:page,y:0,cat:cat,interactive:interactive});
     bookmarks.push({x:0,y:0,cat:'',interactive:false});
     bookmarks.unshift({x:currentPages,y:0,cat:'',interactive:false});
 })
@@ -117,9 +117,10 @@ Object.keys(bookmarks).map((key, id)=>{
     },
     chart: {
         spacingTop: 0,
+        spacingBottom: 50,
         spacingLeft: 10,
         spacingRight: 10,
-        height: 200
+        height: 140
       },
       xAxis: {
         visible: false,
@@ -151,7 +152,7 @@ Object.keys(bookmarks).map((key, id)=>{
           },
       },
       dataLabels: {
-        y: 32,
+        y: 45,
         enabled: true,
         useHTML: true,
         allowOverlap: false,
@@ -190,36 +191,27 @@ Object.keys(bookmarks).map((key, id)=>{
       allowPointSelect: true,
       cursor: 'pointer',
       point: {
-        // y: 240
-      //     events: {
-      //         click: function() {
-      //             this.series.chart.update({
-      //                 tooltip: {
-      //                     enabled: false
-      //                 }
-      //             });
-      //         },
-      //         mouseOut: function() {
-      //             this.series.chart.update({
-      //                 tooltip: {
-      //                     enabled: false
-      //                 }
-      //
-      //             })
-      //         },
-      //         select: function(events){
-      //           const poppers = students[student].timestamps['event'+((this.x)+1)].id
-      //           selectPopup(poppers);
-      //           console.log(popups[poppers].category);
-      //
-      //         }
-      //     }
+          events: {
+              select: function(events){
+                events.preventDefault()
+                console.log(this)
+                parentCallback(this.options.key)
+              }
+          }
       },
     },
     {
       cursor: 'pointer',
       allowPointSelect: true,
-
+      point: {
+          events: {
+              select: function(events){
+                events.preventDefault()
+                console.log(this)
+                parentCallback(this.options.key)
+              }
+          }
+      },
       states: {
           hover:{
             enabled: false

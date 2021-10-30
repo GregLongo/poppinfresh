@@ -7,7 +7,7 @@ import styled from "@emotion/styled"
 
 
 
-export default function StudentGrid({students}){
+export default function StudentGrid({students, classroom}){
   const StudentGrid = styled.ul`
     display: grid;
     grid-template-columns: 50% 50%;
@@ -20,7 +20,7 @@ export default function StudentGrid({students}){
           <div key={key}>
           <Link href={{
             pathname:"/ThisStudent",
-            query: {student:[key]}
+            query: {student:[key],classroom:classroom}
           }}>
           <a>
               <Student

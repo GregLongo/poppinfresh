@@ -1,17 +1,22 @@
 // components/NavButton.js
 
 import Link from "next/link";
-import { withRouter } from "next/router";
+import { withRouter, useRouter } from "next/router";
 import styled from "@emotion/styled"
 
 
 
 
 const StyledNavButton = styled.div`
+  cursor: pointer;
   padding: 2rem;
   text-align: center;
-  &:active{
-    color: red
+  opacity: .5;
+  &:hover{
+    opacity: .7
+  }
+  &.active{
+    opacity: 1
   }
 `
 const NavIcon = styled.div`
@@ -23,7 +28,10 @@ const NavButton = props => (
 
 
 
-  <Link href={props.path}>
+    <Link href={{
+      pathname: props.path,
+      query: 'classroom='+ props.classroom
+    }}>
       <StyledNavButton
         className={`NavButton ${
           props.router.pathname === props.path ? "active" : ""

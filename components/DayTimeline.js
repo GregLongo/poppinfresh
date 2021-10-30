@@ -13,14 +13,13 @@ import { css } from '@emotion/react';
 export default function DayTimeline(props){
 
   useFirebaseConnect([
-    '/students', //in the future change this to just query 1 student, but since its just one class wtv
+    '/classes', //in the future change this to just query 1 student, but since its just one class wtv
     '/popups'
   ])
 
-  const students = useSelector((state) => state.firebase.data.students)
+  const classes = useSelector((state) => state.firebase.data.classes)
   const popups = useSelector((state) => state.firebase.data.popups)
 
-  const [selectDate, setDate] = useState()
 
   // const [thisPopupTitle, selectPopupTitle] = useState()
   // const [thisPopupCategory, selectPopupCategory] = useState();
@@ -28,11 +27,11 @@ export default function DayTimeline(props){
 
   const student = [props.student]
 
-    if (!isLoaded(students)) {
+    if (!isLoaded(classes)) {
     return <div>Loading...</div>
   }
 
-  if (isEmpty(students)) {
+  if (isEmpty(classes)) {
     return <div>Students List Is Empty</div>
   }
   if (!isLoaded(popups)) {
@@ -43,6 +42,7 @@ if (isEmpty(popups)) {
   return <div>Students List Is Empty</div>
 }
 
+const students=classes[props.classroom];
 
   const events = students[student].timestamps;
 
@@ -55,6 +55,12 @@ Object.keys(events).map((key,id) =>{
   var dateTrunc = Date.parse(date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate());
   if(!dates.includes(dateTrunc)){dates.push(dateTrunc)};
 })
+
+  const latest = new Date(dates[dates.length - 1]);
+  const lastdate = latest.getFullYear()+"/"+(latest.getMonth()+1)+"/"+latest.getDate();
+
+const [selectDate, setDate] = useState(lastdate)
+
 
 //all timestamps
 const timestamps = [];
@@ -77,10 +83,35 @@ const DateButton = styled.button`
   border-top: 3px solid lightblue;
   padding-top: .5rem;
   margin-right: .5rem;
+  cursor: pointer;
+  &:hover{
+    border-top: 3px solid teal;
+  }
 `
 const DateMarquis = styled.div`
   padding: 2rem .5rem 0rem;
   font-size: 24px
+`
+
+//point markers inserted via html so referenced by class. is this direct dom manipulation? is this bad?
+const ChartContainer = styled.div`
+   .cat{
+    background: #B4D260;
+    padding: .2rem .4rem;
+    border-radius: 16px;
+    color: white
+  }
+  .pop{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer
+  }
+  img{
+    width: 20px;
+    height: 20px;
+    margin: .5rem
+  }
 `
 
   const currentBook = popups[lastevent];
@@ -98,10 +129,10 @@ const DateMarquis = styled.div`
     xAxis: {
       type: 'datetime',
       lineWidth: 3,
-      opposite: true
+      opposite: true,
     },
     yAxis:{
-      visible: false
+      visible: false,
     },
     legend:{
       enabled: false
@@ -110,17 +141,18 @@ const DateMarquis = styled.div`
       enabled:false
     },
     chart: {
-        // spacingBottom: 70,
+        spacingBottom: 140,
         spacingTop: 40,
         spacingLeft: 10,
         spacingRight: 10,
-        height: 160
+        height: 220,
       },
       tooltip:{
           enabled: false
       },
     series:[{
       dataLabels: {
+       offset:300,
         enabled: true,
         useHTML: true,
         allowOverlap: false,
@@ -128,9 +160,9 @@ const DateMarquis = styled.div`
           // console.log(this.point.blorb)
           var thisClass = '';
           	if (this.point.interactive) {
-              return '<div><img src="/img/interactive.svg"><br/>'+ this.point.cat +'</div>'
+              return '<div class="pop"><img src="/img/interactive.svg"><span class="cat">'+ this.point.cat +'</span></div>'
             } else {
-            	return '<div><img src="/img/bulb.svg"><br/><span css={'+ {visibility: 'hidden'} +'}>'+ this.point.cat +'</span></div>'
+            	return '<div class="pop"><img src="/img/bulb.svg"><span class="cat">'+ this.point.cat +'</span></div>'
             }
           }
       },      lineWidth: '4px',
@@ -176,6 +208,7 @@ const DateMarquis = styled.div`
 
     console.log(timestamps)
     return <DateButton onClick={() => {
+
       setDate(myDate.getFullYear()+"/"+(myDate.getMonth()+1)+"/"+myDate.getDate())
 
         const someevent = Object.keys(students[student].timestamps)[Object.keys(students[student].timestamps).length-1];
@@ -186,10 +219,12 @@ const DateMarquis = styled.div`
         </DateButton>
      })}
      <DateMarquis>{selectDate}</DateMarquis>
-    <HighchartsReact
-      highcharts={Highcharts}
-      options={options}
-    />
+     <ChartContainer>
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={options}
+      />
+     </ChartContainer>
   </div>
 
 )
